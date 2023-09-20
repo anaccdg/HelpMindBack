@@ -1,4 +1,8 @@
 from flask import Flask, jsonify, request
+import json
+import requests
+from business.chatbot.const import API_KEY
+
 
 class BackendManager:
     def __init__(self):
@@ -9,6 +13,7 @@ class BackendManager:
         self.add_cors_headers(self.app)  # Aplica os cabeçalhos CORS globalmente
         self.app.route('/api/data', methods=['GET'])(self.get_data)
         self.app.route('/api/save_questions', methods=['POST'])(self.post_data)
+        self.app.route('/api/conversation_chat', methods=['POST'])(self.chatgpt)
 
     @staticmethod
     def add_cors_headers(app):
@@ -18,6 +23,13 @@ class BackendManager:
             response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
+
+    def chatgpt(self):
+        headers = {'Authorization': f'Bearer{API_KEY}'}
+        link = 'https://api.openai.com/v1/models'
+        requisicao = requests.get(link, headers=headers)
+        print(requisicao)
+        print(requisicao.text)
 
     def get_data(self):
         data = {'message': 'GET request successful'}
