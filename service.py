@@ -13,7 +13,7 @@ class BackendManager:
         self.add_cors_headers(self.app)
         self.app.route('/api/data', methods=['GET'])(self.get_data)
         self.app.route('/api/save_questions', methods=['POST'])(self.post_data)
-        self.app.route('/api/conversation_chat', methods=['GET'])(self.chatgpt)
+        self.app.route('/api/conversation_chat', methods=['POST'])(self.chatgpt)
 
     @staticmethod
     def add_cors_headers(app):
@@ -28,15 +28,25 @@ class BackendManager:
         headers = {'Authorization': f'Bearer {API_KEY}', 'Content-Type': 'application/json'}
         link = 'https://api.openai.com/v1/chat/completions'
         id_modelo = 'gpt-3.5-turbo'
+        mensagem_usuario = ''
+
+        request_data = request.get_json()
+
+        if 'mensagemUsuario' in request_data:
+            mensagem_usuario = request_data['mensagemUsuario']
+
         body = {
             "model": id_modelo,
-            "messages": [{"role": "user", "content": "Olá Chat"}]
+            "messages": [{"role": "user", "content": 'Você é um conselheiro de um chatbot de depressão, o usuário enviou a seguinte mensagem: ' + mensagem_usuario + ', agora mande outra mensagem para ele'}]
         }
         body = json.dumps(body)
+
         requisicao = requests.post(link, headers=headers, data=body)
-        return requisicao.json()
-        #mensagem = resposta['choises'][0]['message']['content']
-        #return mensagem
+        resposta = requisicao.json()
+
+        mensagem = resposta['choices'][0]['message']['content']
+
+        return mensagem
 
 
     def get_data(self):
