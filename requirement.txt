@@ -1,0 +1,3 @@
+pip install pyodbc
+pip install Flask
+pip install flask-cors
