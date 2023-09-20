@@ -10,10 +10,10 @@ class BackendManager:
         self.setup_endpoints()
 
     def setup_endpoints(self):
-        self.add_cors_headers(self.app)  # Aplica os cabeçalhos CORS globalmente
+        self.add_cors_headers(self.app)
         self.app.route('/api/data', methods=['GET'])(self.get_data)
         self.app.route('/api/save_questions', methods=['POST'])(self.post_data)
-        self.app.route('/api/conversation_chat', methods=['POST'])(self.chatgpt)
+        self.app.route('/api/conversation_chat', methods=['GET'])(self.chatgpt)
 
     @staticmethod
     def add_cors_headers(app):
@@ -25,11 +25,19 @@ class BackendManager:
             return response
 
     def chatgpt(self):
-        headers = {'Authorization': f'Bearer{API_KEY}'}
-        link = 'https://api.openai.com/v1/models'
-        requisicao = requests.get(link, headers=headers)
-        print(requisicao)
-        print(requisicao.text)
+        headers = {'Authorization': f'Bearer {API_KEY}', 'Content-Type': 'application/json'}
+        link = 'https://api.openai.com/v1/chat/completions'
+        id_modelo = 'gpt-3.5-turbo'
+        body = {
+            "model": id_modelo,
+            "messages": [{"role": "user", "content": "Olá Chat"}]
+        }
+        body = json.dumps(body)
+        requisicao = requests.post(link, headers=headers, data=body)
+        return requisicao.json()
+        #mensagem = resposta['choises'][0]['message']['content']
+        #return mensagem
+
 
     def get_data(self):
         data = {'message': 'GET request successful'}
