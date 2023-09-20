@@ -44,6 +44,8 @@ class BackendManager:
         requisicao = requests.post(link, headers=headers, data=body)
         resposta = requisicao.json()
 
+        print(resposta)
+
         mensagem = resposta['choices'][0]['message']['content']
 
         return mensagem
