@@ -8,6 +8,7 @@ class BackendManager:
     def __init__(self):
         self.app = Flask(__name__)
         self.setup_endpoints()
+        self.conversation_history = []
 
     def setup_endpoints(self):
         self.add_cors_headers(self.app)
@@ -35,9 +36,14 @@ class BackendManager:
         if 'mensagemUsuario' in request_data:
             mensagem_usuario = request_data['mensagemUsuario']
 
+        conversation = self.conversation_history + [
+            {"role": "system", "content": "Você é um assistente de chat que ajuda com problemas de depressão."},
+            {"role": "user", "content": mensagem_usuario}
+        ]
+
         body = {
             "model": id_modelo,
-            "messages": [{"role": "user", "content": 'Você é um conselheiro de um chatbot de depressão, o usuário enviou a seguinte mensagem: ' + mensagem_usuario + ', agora mande outra mensagem para ele'}]
+            "messages": conversation  
         }
         body = json.dumps(body)
 
@@ -47,6 +53,8 @@ class BackendManager:
         print(resposta)
 
         mensagem = resposta['choices'][0]['message']['content']
+
+        self.conversation_history.append({"role": "assistant", "content": mensagem})
 
         return mensagem
 
