@@ -37,7 +37,7 @@ class BackendManager:
             mensagem_usuario = request_data['mensagemUsuario']
 
         conversation = self.conversation_history + [
-            {"role": "system", "content": "Você é um assistente de chat que ajuda com problemas de depressão."},
+            {"role": "system", "content": "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão, nada mais"},
             {"role": "user", "content": mensagem_usuario}
         ]
 
