@@ -37,9 +37,16 @@ class BackendManager:
             mensagem_usuario = request_data['mensagemUsuario']
 
         conversation = self.conversation_history + [
-            {"role": "system", "content": "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão, nada mais"},
+            {"role": "system", "content": "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão."},
             {"role": "user", "content": mensagem_usuario}
         ]
+
+        mensagem_adicional = "Não responda sobre outros assuntos, diga que foi projetado apenas para lidar com assuntos relacionados a depressão, lembre-se o depressivo não tem paciência de ler textos grandes, então responda de forma curta e objetiva."
+
+        partes_mensagem_adicional = mensagem_adicional.split('\n')
+
+        for parte in partes_mensagem_adicional:
+            conversation.append({"role": "system", "content": parte})
 
         body = {
             "model": id_modelo,
