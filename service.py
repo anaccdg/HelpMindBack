@@ -2,9 +2,12 @@ from flask import Flask, jsonify, request
 import json
 import requests
 from business.chatbot.const import API_KEY
-
+from classifier import classify
 
 class BackendManager:
+    respostas_usuario = []
+    classificacao = None
+
     def __init__(self):
         self.app = Flask(__name__)
         self.setup_endpoints()
@@ -12,7 +15,7 @@ class BackendManager:
 
     def setup_endpoints(self):
         self.add_cors_headers(self.app)
-        self.app.route('/api/data', methods=['GET'])(self.get_data)
+        self.app.route('/api/data', methods=['POST'])(self.pegar_respostas)
         self.app.route('/api/save_questions', methods=['POST'])(self.post_data)
         self.app.route('/api/conversation_chat', methods=['POST'])(self.chatgpt)
 
@@ -24,6 +27,14 @@ class BackendManager:
             response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
+
+    def usar_assistente(self):
+        if self.classificacao[0] == 'Leve':
+            return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (LEVE)"
+        elif self.classificacao[0] == 'Moderado':
+            return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (MODERADO)"
+        else:
+            return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (GRAVE)"
 
     def chatgpt(self):
         headers = {'Authorization': f'Bearer {API_KEY}', 'Content-Type': 'application/json'}
@@ -37,7 +48,7 @@ class BackendManager:
             mensagem_usuario = request_data['mensagemUsuario']
 
         conversation = self.conversation_history + [
-            {"role": "system", "content": "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão."},
+            {"role": "system", "content": self.usar_assistente()},
             {"role": "user", "content": mensagem_usuario}
         ]
 
@@ -65,10 +76,32 @@ class BackendManager:
 
         return mensagem
 
+    def pegar_respostas(self):
+        content = request.get_json()
 
-    def get_data(self):
-        data = {'message': 'GET request successful'}
-        return jsonify(data)
+        respostas = content.get('respostas')
+        if respostas is None:
+            return jsonify({'error': 'Invalid JSON'}), 400
+
+        self.respostas_usuario = []
+
+        for coluna in respostas:
+            int_coluna = []
+            for linha in coluna:
+                valor = ord(linha) - ord('0')
+                int_coluna.append(valor)
+
+            self.respostas_usuario.append(int_coluna)
+
+        print(self.respostas_usuario)
+
+        self.classificacao = classify.pegar_classificacao(self.respostas_usuario)
+
+        print(self.classificacao)
+        print(self.usar_assistente())
+
+        response_data = {'message': f'POST request successful. Received message: {respostas}'}
+        return jsonify(response_data)
 
     def post_data(self):
         content = request.get_json()
