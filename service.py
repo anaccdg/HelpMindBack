@@ -29,12 +29,13 @@ class BackendManager:
             return response
 
     def usar_assistente(self):
-        if self.classificacao[0] == 'Leve':
-            return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (LEVE)"
-        elif self.classificacao[0] == 'Moderado':
-            return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (MODERADO)"
-        else:
-            return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (GRAVE)"
+        if self.classificacao is not None and len(self.classificacao) > 0:
+            if self.classificacao[0] == 'Leve':
+                return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (LEVE)"
+            elif self.classificacao[0] == 'Moderado':
+                return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (MODERADO)"
+        return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (GRAVE)"
+
 
     def chatgpt(self):
         headers = {'Authorization': f'Bearer {API_KEY}', 'Content-Type': 'application/json'}
@@ -46,6 +47,8 @@ class BackendManager:
 
         if 'mensagemUsuario' in request_data:
             mensagem_usuario = request_data['mensagemUsuario']
+
+        print("Valor de self.classificacao:", self.classificacao)
 
         conversation = self.conversation_history + [
             {"role": "system", "content": self.usar_assistente()},
