@@ -35,11 +35,10 @@ class BackendManager:
         print("Valor de classificacao:", classificacao)
         if classificacao is not None and len(classificacao) > 0:
             if classificacao[0] == 'Leve':
-                return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (LEVE)"
+                return "O paciente que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão LEVE, converse com ele suscintamente com base nisso"
             elif classificacao[0] == 'Moderado':
-                return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (MODERADO)"
-            
-        return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (GRAVE)"
+                return "O paciente que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão MODERADA, converse com ele suscintamente com base nisso"
+        return "O paciente que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão GRAVE, converse com ele suscintamente com base nisso"
 
 
     def chatgpt(self):
@@ -58,7 +57,13 @@ class BackendManager:
             {"role": "user", "content": mensagem_usuario}
         ]
 
-        mensagem_adicional = "Não responda sobre outros assuntos, diga que foi projetado apenas para lidar com assuntos relacionados a depressão, lembre-se o depressivo não tem paciência de ler textos grandes, então responda de forma curta e objetiva."
+        mensagem_adicional = """
+                            Não responda sobre outros assuntos, diga que foi projetado apenas para lidar com assuntos relacionados à depressão.
+                            Lembre-se de que as pessoas que sofrem de depressão podem ter dificuldade para ler textos longos.
+                            Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades.
+                            Responda de forma amigavel, e carinhosa não seja seco.
+                            Se ele demonstrar vontade de se suicidar, ou morrer, sugira ele entrar em contato com o CVV 188
+                            """
 
         partes_mensagem_adicional = mensagem_adicional.split('\n')
 
