@@ -4,14 +4,16 @@ import requests
 from business.chatbot.const import API_KEY
 from classifier import classify
 
+classificacao = None
+
 class BackendManager:
     respostas_usuario = []
-    classificacao = None
 
     def __init__(self):
         self.app = Flask(__name__)
         self.setup_endpoints()
         self.conversation_history = []
+        self.classificacao = []
 
     def setup_endpoints(self):
         self.add_cors_headers(self.app)
@@ -29,11 +31,14 @@ class BackendManager:
             return response
 
     def usar_assistente(self):
-        if self.classificacao is not None and len(self.classificacao) > 0:
-            if self.classificacao[0] == 'Leve':
+        global classificacao
+        print("Valor de classificacao:", classificacao)
+        if classificacao is not None and len(classificacao) > 0:
+            if classificacao[0] == 'Leve':
                 return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (LEVE)"
-            elif self.classificacao[0] == 'Moderado':
+            elif classificacao[0] == 'Moderado':
                 return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (MODERADO)"
+            
         return "Você é um assistente de chat que ajuda com problemas de depressão. Ajude apenas com questões relacionadas a depressão. (GRAVE)"
 
 
@@ -47,8 +52,6 @@ class BackendManager:
 
         if 'mensagemUsuario' in request_data:
             mensagem_usuario = request_data['mensagemUsuario']
-
-        print("Valor de self.classificacao:", self.classificacao)
 
         conversation = self.conversation_history + [
             {"role": "system", "content": self.usar_assistente()},
@@ -98,9 +101,9 @@ class BackendManager:
 
         print(self.respostas_usuario)
 
-        self.classificacao = classify.pegar_classificacao(self.respostas_usuario)
+        global classificacao
+        classificacao = classify.pegar_classificacao(self.respostas_usuario)
 
-        print(self.classificacao)
         print(self.usar_assistente())
 
         response_data = {'message': f'POST request successful. Received message: {respostas}'}
