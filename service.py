@@ -58,13 +58,8 @@ class BackendManager:
         ]
 
         mensagem_adicional = """
-                            Não responda sobre outros assuntos, diga que foi projetado apenas para lidar com assuntos relacionados à depressão.
-                            Lembre-se de que as pessoas que sofrem de depressão podem ter dificuldade para ler textos longos.
+                            Não responda sobre outros assuntos que não seja relacionado a depressão, diga que foi projetado apenas para lidar com assuntos relacionados à depressão.
                             Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades.
-                            Responda de forma amigavel, e carinhosa não seja seco.
-                            Se ele demonstrar vontade de se suicidar, ou morrer, sugira ele entrar em contato com o CVV 188.
-                            Se ele demonstrar gratidao, não comece uma nova conversa, apenas diga que está la para ajuda-lo.
-                            Não cumprimente novamente, apenas continue a conversa, com base no contexto
                             """
 
         partes_mensagem_adicional = mensagem_adicional.split('\n')
