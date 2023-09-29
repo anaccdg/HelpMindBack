@@ -35,10 +35,10 @@ class BackendManager:
         print("Valor de classificacao:", classificacao)
         if classificacao is not None and len(classificacao) > 0:
             if classificacao[0] == 'Leve':
-                return "O paciente que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão LEVE, converse com ele suscintamente com base nisso"
+                return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão LEVE, converse com ele com base nisso e não passe de 150 caracteres"
             elif classificacao[0] == 'Moderado':
-                return "O paciente que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão MODERADA, converse com ele suscintamente com base nisso"
-        return "O paciente que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão GRAVE, converse com ele suscintamente com base nisso"
+                return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão MODERADA, converse com ele suscintamente com base nisso e não passe de 150 caracteres"
+        return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão GRAVE, converse com ele suscintamente com base nisso e não passe de 150 caracteres"
 
 
     def chatgpt(self):
@@ -62,7 +62,9 @@ class BackendManager:
                             Lembre-se de que as pessoas que sofrem de depressão podem ter dificuldade para ler textos longos.
                             Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades.
                             Responda de forma amigavel, e carinhosa não seja seco.
-                            Se ele demonstrar vontade de se suicidar, ou morrer, sugira ele entrar em contato com o CVV 188
+                            Se ele demonstrar vontade de se suicidar, ou morrer, sugira ele entrar em contato com o CVV 188.
+                            Se ele demonstrar gratidao, não comece uma nova conversa, apenas diga que está la para ajuda-lo.
+                            Não cumprimente novamente, apenas continue a conversa, com base no contexto
                             """
 
         partes_mensagem_adicional = mensagem_adicional.split('\n')
