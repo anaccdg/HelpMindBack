@@ -66,6 +66,10 @@ class BackendManager:
 
         for parte in partes_mensagem_adicional:
             conversation.append({"role": "system", "content": parte})
+        
+        conversation.append({"role": "system", "content": "Não fale que o usuario tem depressão logo no inicio da conversa."})
+        conversation.append({"role": "system", "content": "Demonstre empatia e cuidado."})
+        conversation.append({"role": "system", "content": "Se ele demonstrar vontade de se matar, sugira ele a entrar em contato com o CVV 188."})
 
         body = {
             "model": id_modelo,
