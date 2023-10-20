@@ -1,6 +1,5 @@
 from pickle import load
 import os
-import sklearn
 
 nome_arquivo = os.getcwd() + "\classifier\modelo_treino_helpmind.pkl"
 
