@@ -58,7 +58,7 @@ class BackendManager:
 
         mensagem_adicional = """
                             Não responda sobre outros assuntos que não seja relacionado a depressão, diga que foi projetado apenas para lidar com assuntos relacionados à depressão.
-                            Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades.
+                            Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades. Tente puxar assunto e não deixar a conversar morrer.
                             """
 
         partes_mensagem_adicional = mensagem_adicional.split('\n')
