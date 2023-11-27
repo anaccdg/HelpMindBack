@@ -35,10 +35,10 @@ class BackendManager:
         print("Valor de classificacao:", classificacao)
         if classificacao is not None and len(classificacao) > 0:
             if classificacao[0] == 'Leve':
-                return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão LEVE, converse com ele com base nisso, não diga em nenhum momento que ela tem depressão e não passe de 150 caracteres"
+                return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão LEVE, converse com ele com base nisso, não diga em nenhum momento que ela tem depressão e não passe de 150 caracteres. Não responda sobre outros assuntos que não seja relacionado a depressão mesmo que seja para puxar assunto, diga que foi projetado apenas para lidar com assuntos relacionados à depressão."
             elif classificacao[0] == 'Moderado':
-                return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão MODERADA, converse com ele suscintamente com base nisso, não diga em nenhum momento que ela tem depressão e não passe de 150 caracteres"
-        return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão GRAVE, converse com ele suscintamente com base nisso, não diga em nenhum momento que ela tem depressão e não passe de 150 caracteres"
+                return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão MODERADA, converse com ele suscintamente com base nisso, não diga em nenhum momento que ela tem depressão e não passe de 150 caracteres. Não responda sobre outros assuntos que não seja relacionado a depressão mesmo que seja para puxar assunto, diga que foi projetado apenas para lidar com assuntos relacionados à depressão."
+        return "A pessoa que você vai conversar respondeu a um questionário antes de iniciar a conversa com 16 questões, e através da IA treinada pelo randomforest com base em suas respostas classificou que ele possui depressão GRAVE, converse com ele suscintamente com base nisso, não diga em nenhum momento que ela tem depressão e não passe de 150 caracteres. Não responda sobre outros assuntos que não seja relacionado a depressão mesmo que seja para puxar assunto, diga que foi projetado apenas para lidar com assuntos relacionados à depressão."
 
     def chatgpt(self):
         headers = {'Authorization': f'Bearer {API_KEY}', 'Content-Type': 'application/json'}
@@ -57,8 +57,7 @@ class BackendManager:
         ]
 
         mensagem_adicional = """
-                            Não responda sobre outros assuntos que não seja relacionado a depressão, diga que foi projetado apenas para lidar com assuntos relacionados à depressão.
-                            Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades. Tente puxar assunto e não deixar a conversar morrer.
+                            Por favor, forneça respostas curtas e objetivas para melhor atender às suas necessidades. Tente puxar assunto e não deixar a conversar morrer, não fale em nenhum momento que ela tem depressão.
                             """
 
         partes_mensagem_adicional = mensagem_adicional.split('\n')
